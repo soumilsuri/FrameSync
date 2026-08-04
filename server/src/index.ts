@@ -20,11 +20,22 @@ const CORS_ORIGIN = getNormalizedCorsOrigin();
 
 const fastify = Fastify({ logger: true });
 
-// Attach Socket.IO directly to Fastify's underlying HTTP server
+// Add CORS headers for Fastify HTTP routes
+fastify.addHook('onRequest', async (req, reply) => {
+  reply.header('Access-Control-Allow-Origin', '*');
+  reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    reply.status(200).send();
+  }
+});
+
+// Attach Socket.IO directly to Fastify's underlying HTTP server with permissive CORS
 const io = new Server(fastify.server, {
   cors: {
-    origin: CORS_ORIGIN,
+    origin: true, // Allow all origins dynamically
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 

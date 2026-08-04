@@ -8,10 +8,7 @@ services:
     startCommand: npm run start:server
     envVars:
       - key: FRONTEND_URL
-        fromService:
-          type: web
-          name: framesync-frontend
-          property: host
+        value: '*'
 
   # Next.js Frontend Web Application
   - type: web
@@ -22,7 +19,4 @@ services:
     startCommand: npm run start:frontend
     envVars:
       - key: NEXT_PUBLIC_SERVER_URL
-        fromService:
-          type: web
-          name: framesync-server
-          property: host
+        value: https://framesync-server.onrender.com
