@@ -2,6 +2,10 @@
   "name": "framesync",
   "version": "1.0.0",
   "description": "FrameSync - Real-time multi-display video synchronization system",
+  "workspaces": [
+    "frontend",
+    "server"
+  ],
   "scripts": {
     "dev": "npx concurrently \"npm run dev --prefix server\" \"npm run dev --prefix frontend\"",
     "dev:server": "npm run dev --prefix server",
