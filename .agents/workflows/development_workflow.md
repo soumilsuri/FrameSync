@@ -27,3 +27,8 @@
 ## Step 5: End-to-End Verification
 - Launch server and frontend. Open 1 Controller tab and 2 Display tabs.
 - Verify playback synchronization and drift correction behavior.
+
+## Step 6: Deployment (Render / Cloud)
+- Root scripts added: `npm run build:server`, `npm run start:server`, `npm run build:frontend`, `npm run start:frontend`.
+- Deploy using `render.yaml` Blueprint (which provisions `framesync-server` and `framesync-frontend` automatically) or configure two Web Services with repository root directory.
+- Environment variables: `FRONTEND_URL` on Server, `NEXT_PUBLIC_SERVER_URL` on Frontend.

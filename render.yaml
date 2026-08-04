@@ -1,0 +1,28 @@
+services:
+  # Fastify + Socket.IO Real-Time Server
+  - type: web
+    name: framesync-server
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build:server
+    startCommand: npm run start:server
+    envVars:
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: framesync-frontend
+          property: url
+
+  # Next.js Frontend Web Application
+  - type: web
+    name: framesync-frontend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build:frontend
+    startCommand: npm run start:frontend
+    envVars:
+      - key: NEXT_PUBLIC_SERVER_URL
+        fromService:
+          type: web
+          name: framesync-server
+          property: url

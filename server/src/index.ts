@@ -9,7 +9,7 @@ import { VIDEO_LIST } from './types';
 
 import { registerSocketHandlers } from './socketHandlers';
 
-const PORT = 4000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000;
 const CORS_ORIGIN = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 const fastify = Fastify({ logger: true });
