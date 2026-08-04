@@ -3,7 +3,6 @@
 // ============================================================
 
 import Fastify from 'fastify';
-import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { VIDEO_LIST } from './types';
 
@@ -21,13 +20,17 @@ const CORS_ORIGIN = getNormalizedCorsOrigin();
 
 const fastify = Fastify({ logger: true });
 
-// Attach Socket.IO to the underlying raw http.Server
-const httpServer = createServer(fastify.server);
-const io = new Server(httpServer, {
+// Attach Socket.IO directly to Fastify's underlying HTTP server
+const io = new Server(fastify.server, {
   cors: {
     origin: CORS_ORIGIN,
     methods: ['GET', 'POST'],
   },
+});
+
+// Root endpoint for browser & status check
+fastify.get('/', async () => {
+  return { status: 'ok', service: 'FrameSync Server' };
 });
 
 // REST endpoint: list available videos
@@ -45,15 +48,13 @@ io.on('connection', (socket) => {
   registerSocketHandlers(io, socket);
 });
 
-// Start — listen on the raw http server (not fastify.listen) so Socket.IO shares the port
+// Start server
 const start = async () => {
   try {
-    await fastify.ready();
-    httpServer.listen(PORT, '0.0.0.0', () => {
-      console.log(`\n🚀 FrameSync Server running on http://localhost:${PORT}`);
-      console.log(`   WebSocket endpoint: ws://localhost:${PORT}`);
-      console.log(`   CORS origin: ${CORS_ORIGIN}\n`);
-    });
+    await fastify.listen({ port: PORT, host: '0.0.0.0' });
+    console.log(`\n🚀 FrameSync Server running on http://0.0.0.0:${PORT}`);
+    console.log(`   WebSocket endpoint: ws://0.0.0.0:${PORT}`);
+    console.log(`   CORS origin: ${CORS_ORIGIN}\n`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

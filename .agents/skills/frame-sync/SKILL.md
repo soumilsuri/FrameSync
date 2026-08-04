@@ -27,6 +27,9 @@ FrameSync uses a Next.js frontend (`/controller`, `/display/[id]`) and a Fastify
   /types.ts                (Shared event contract)
 ```
 
+## Fastify Server Bootstrap
+Socket.IO is attached directly to Fastify's underlying HTTP server (`fastify.server`), and server startup uses `fastify.listen({ port: PORT, host: '0.0.0.0' })`. Root endpoint `/` returns a HTTP 200 OK `{ status: 'ok', service: 'FrameSync Server' }` health check for cloud load balancers (e.g., Render).
+
 ## 2. Server State Engine (`state.ts`)
 The server maintains an anchor point rather than broadcasting a ticking position:
 
