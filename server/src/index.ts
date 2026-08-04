@@ -10,7 +10,14 @@ import { VIDEO_LIST } from './types';
 import { registerSocketHandlers } from './socketHandlers';
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000;
-const CORS_ORIGIN = process.env.FRONTEND_URL || 'http://localhost:3000';
+const getNormalizedCorsOrigin = () => {
+  const origin = process.env.FRONTEND_URL || 'http://localhost:3000';
+  if (origin !== '*' && !origin.startsWith('http://') && !origin.startsWith('https://')) {
+    return `https://${origin}`;
+  }
+  return origin;
+};
+const CORS_ORIGIN = getNormalizedCorsOrigin();
 
 const fastify = Fastify({ logger: true });
 

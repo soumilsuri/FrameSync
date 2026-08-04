@@ -6,7 +6,15 @@
 
 import { io, Socket } from 'socket.io-client';
 
-const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000';
+const getNormalizedServerUrl = () => {
+  const url = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000';
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return `https://${url}`;
+  }
+  return url;
+};
+
+const SERVER_URL = getNormalizedServerUrl();
 
 let socket: Socket | null = null;
 

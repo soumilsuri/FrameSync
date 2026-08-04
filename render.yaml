@@ -11,7 +11,7 @@ services:
         fromService:
           type: web
           name: framesync-frontend
-          property: url
+          property: host
 
   # Next.js Frontend Web Application
   - type: web
@@ -25,4 +25,4 @@ services:
         fromService:
           type: web
           name: framesync-server
-          property: url
+          property: host
